@@ -12,8 +12,8 @@ a = 1 + 4 + 5 can be treated as a syntax tree like this:
         / \
         a  +
           / \
-          +  +
-         / \  5
+          +  5
+         / \  
          1  4
 ```
 
