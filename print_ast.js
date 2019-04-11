@@ -1,17 +1,6 @@
  const AST = (function(){
-    // format ( / ( + 1 3 ) 5 )
-    
-     // ast.prototype.print = function(indent=''){
-    //     indent += '\t'
-    //     if(this.leaf.length == 0) return this.root;
-    //     var content = this.leaf.map(elem=>indent+elem.print(indent)).join('\n');
-    //     return `{\n${indent}${this.root}\n${content}\n${indent.slice(0,-1)}}`
-    // }
-    const AST = {
-        buildAst,
-        id: 1,
-        map: {}
-    }
+    var id = 1
+    var map = {}
 
     function ast(root){
         this.root = root
@@ -23,21 +12,28 @@
         indent += '\t'
         var content = this.leaf.map(elem=>{
             if(elem.leaf.length == 0) return indent + elem.root
-            AST.map[AST.id] = elem
-            AST.id++
+            map[id] = elem
+            id++
             var text;
             if(elem.expand) {
-                text = `${indent}<button id=${AST.id-1} onclick="onClick(this)">-</button> ${elem.print(indent)}`
+                text = `${indent}<button id=${id-1} onclick="onClick(this)">-</button> ${elem.print(indent)}`
             }
             else{
-                text =`${indent}<button id=${AST.id-1} onclick="onClick(this)">+</button>{ ${elem.root} }`
+                text =`${indent}<button id=${id-1} onclick="onClick(this)">+</button>{ ${elem.root} }`
             }
             return text;
         }).join('\n');
         return `{\n${indent}${this.root}\n${content}\n${indent.slice(0,-1)}}`
     }
-
-    // uncessary
+    function resetAstMap() {
+        id = 1
+    }
+    function alterAstNodeExpandState(id) {
+        map[id].expand = !map[id].expand
+    }
+    function printAst(astTree) {
+        return astTree.print()
+    }
     function buildAst(tokens, position={current:0}){
         if(tokens[position.current]!= '(') console.log("error occurred!");
         position.current ++;
@@ -53,5 +49,10 @@
         }
         return node
     }
-    return AST
+    return {
+        buildAst,
+        printAst,
+        alterAstNodeExpandState,
+        resetAstMap
+    }
 }())

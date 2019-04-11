@@ -56,12 +56,12 @@
         const output = document.getElementById("right")
         var text, astTree
         function render(astTree){
-            AST.id = 1
-            output.innerHTML = astTree.print()
+            AST.resetAstMap()
+            output.innerHTML = AST.printAst(astTree)
         }
 
         function onClick(that){
-            AST.map[that.id].expand = !AST.map[that.id].expand
+            AST.alterAstNodeExpandState(that.id)
             render(astTree)
         }
 
